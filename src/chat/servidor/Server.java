@@ -17,7 +17,7 @@ public class Server {
     public static void main(String[] args) throws Exception {
         try {
             final int PORT = 4445;
-            ServerSocket server = new ServerSocket(PORT); //CREO EL SERVER CON EL PUERTO A UTILIZAR. ESTE VA A SER IGUAL PARA TODOS
+            ServerSocket server = new ServerSocket(PORT);
             ObjectMapper mapper = new ObjectMapper();
 
             while (true) {
@@ -31,12 +31,12 @@ public class Server {
 
                 ServerThread chat;
 
-                switch (user.getSala()) {//DEPENDIENDO LA SALA ELEGIDA HAGO.
+                switch (user.getSala()) {
                     case 1:
                         listaDeConexionesSala1.add(socket);
-                        chat = new ServerThread(socket, listaDeConexionesSala1, user.getNombre());//CREO UN NUEVO "CHAT"
-                        Thread nuevoProcesoParalelo1 = new Thread(chat); // GENERO UN NUEVO THREAD PARA CORRER EL "CHAT" CREADO.
-                        nuevoProcesoParalelo1.start(); // HAGO CORRER EL THREAD DEL NUEVO PROCESO.
+                        chat = new ServerThread(socket, listaDeConexionesSala1, user.getNombre());
+                        Thread nuevoProcesoParalelo1 = new Thread(chat);
+                        nuevoProcesoParalelo1.start();
                         break;
                     case 2:
                         listaDeConexionesSala2.add(socket);
@@ -54,13 +54,9 @@ public class Server {
                         break;
                 }
                 System.out.println("Client conectado a Sala " + user.getSala() + " desde: " + socket.getLocalAddress().getHostName());
-
-
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
-
-
 }

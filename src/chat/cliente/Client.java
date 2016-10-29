@@ -11,6 +11,7 @@ public class Client {
     public static void main(String[] args) throws Exception {
         String server = "192.168.0.5";
         ObjectMapper mapper = new ObjectMapper();
+
         try {
             final int PORT = 4445;
             Socket socket = new Socket(server, PORT);

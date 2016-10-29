@@ -1,14 +1,15 @@
 package chat.cliente;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
 
-public class ClientThread implements Runnable { //PARA QUE TRABAJE COMO THREAD DEBE IMPLEMENTAR LA INTERFAZ RUNNABLE
-    Socket socket;
-    Scanner entradaDatos;
-    PrintWriter salidaDatos;
+public class ClientThread implements Runnable {
+    private Socket socket;
+    private Scanner sc;
+    private PrintWriter out;
 
     public ClientThread(Socket socket) {
         this.socket = socket;
@@ -17,39 +18,40 @@ public class ClientThread implements Runnable { //PARA QUE TRABAJE COMO THREAD D
     @Override
     public void run() {
         try {
-            try {
-                this.entradaDatos = new Scanner(this.socket.getInputStream()); // OBTENGO EL CANAL DE ENTRADA
-                this.salidaDatos = new PrintWriter(this.socket.getOutputStream()); //OBTENGO EL CANAL DE SALIDA
-                this.salidaDatos.flush();
+            this.sc = new Scanner(this.socket.getInputStream());
+            this.out = new PrintWriter(this.socket.getOutputStream());
+            this.out.flush();
 
-                while (true) {//HAGO LA ESCUCHA PERMANENTE
-                    recibirDatos();
-                }
-            } finally {
-                this.socket.close();
+            while (true) {
+                recibirDatos();
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                this.socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
 
-    public void recibirDatos() {
-        if (this.entradaDatos.hasNext()) {
-            String mensajeEntrante = this.entradaDatos.nextLine();
+    private void recibirDatos() {
+        if (this.sc.hasNext()) {
+            String mensajeEntrante = this.sc.nextLine();
             System.out.println(mensajeEntrante);
         }
     }
 
     public void enviarDatos(String mensajeSaliente) {
-        this.salidaDatos.println(mensajeSaliente);
-        this.salidaDatos.flush();
+        this.out.println(mensajeSaliente);
+        this.out.flush();
     }
 
     public void desconectar() throws Exception {
-        this.salidaDatos.println(" se ha retirado de la sala");
-        this.salidaDatos.flush();
+        this.out.println(" se ha retirado de la sala");
+        this.out.flush();
         this.socket.close();
         System.exit(0);
     }
