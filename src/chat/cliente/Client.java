@@ -10,23 +10,25 @@ import java.util.Scanner;
 public class Client {
     public static void main(String[] args) throws Exception {
         String server = "192.168.0.5";
+        ObjectMapper mapper = new ObjectMapper();
         try {
-            final int PORT = 444;
+            final int PORT = 4445;
             Socket socket = new Socket(server, PORT);
             System.out.println("Te conectaste a: " + server);
             System.out.println("Seleccione una sala y nickName (Separados por espacio. Ejemplo 1 pepe)");
-            Scanner sc = new Scanner(System.in);    // OBTENGO LA ENTRADA POR TECLADO DE CONSOLA.
+            Scanner sc = new Scanner(System.in);
 
-            ObjectMapper mapper = new ObjectMapper();
             User user = new User(sc.nextInt(), sc.next());
             String jsonInString = mapper.writeValueAsString(user);
 
             PrintWriter out = new PrintWriter(socket.getOutputStream()); //OBTENGO EL CANAL DE SALIDA DEL SOCKET HACIA EL SERVIDOR
             out.println(jsonInString); // LE ENVIO EL MENSAJE DE SALA Y NICKNAME
 
-            ClientThread newClient = new ClientThread(socket); // CREO UN "CLIENTE" EL CUAL SOLO ESTARA ENCARGADO DE HACER LA ESCUCHA CONTINUA
+            out.flush();
+
+            ClientThread newClient = new ClientThread(socket);
             Thread thread = new Thread(newClient);
-            thread.start(); // INICIO EL THREAD
+            thread.start();
 
             String textoTeclado = "";
             while (!textoTeclado.equals("fin")) { //MIENTRAS NO ESCRIBA FIN PODRE ENVIAR LOS MENSAJES QUE QUIERA

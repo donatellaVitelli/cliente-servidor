@@ -6,11 +6,23 @@ import java.io.Serializable;
  * Created by gustavo on 29/10/2016.
  */
 public class User implements Serializable {
-    private String nombre;
     private int sala;
+    private String nombre;
+
+    public User() {
+        
+    }
 
     public User(int sala, String nombre) {
         this.nombre = nombre;
+        this.sala = sala;
+    }
+
+    public int getSala() {
+        return this.sala;
+    }
+
+    public void setSala(int sala) {
         this.sala = sala;
     }
 
@@ -20,13 +32,5 @@ public class User implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public int getSala() {
-        return this.sala;
-    }
-
-    public void setSala(int sala) {
-        this.sala = sala;
     }
 }

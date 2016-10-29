@@ -18,13 +18,12 @@ public class Server {
         try {
             final int PORT = 4445;
             ServerSocket server = new ServerSocket(PORT); //CREO EL SERVER CON EL PUERTO A UTILIZAR. ESTE VA A SER IGUAL PARA TODOS
-
+            ObjectMapper mapper = new ObjectMapper();
 
             while (true) {
                 System.out.println("Esperando un cliente");
                 Socket socket = server.accept();
 
-                ObjectMapper mapper = new ObjectMapper();
                 Scanner sc = new Scanner(socket.getInputStream());
                 String input = sc.nextLine();
 
@@ -59,7 +58,7 @@ public class Server {
 
             }
         } catch (Exception e) {
-
+            System.out.println(e.getMessage());
         }
     }
 
